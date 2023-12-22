@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import Display from './Display';
-import Keypad from './Keypad';
 
-const Calculator: React.FC = () => {
-    const [input, setInput] = useState<string>('');
+const Calculator = () => {
+  const [input, setInput] = useState<string>('');
+  const [result, setResult] = useState<number | string>('');
 
-    const handleKeyPress = (key: string) => {
-        if (key === '=') {
-            try {
-                setInput(eval(input).toString());
-            } catch (e) {
-                setInput('Error');
-            }
-        } else if (key === 'C') {
-            setInput('');
-        } else {
-            setInput(input + key);
-        }
-    };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
 
-    return (
-        <div>
-            <Display input={input} />
-            <Keypad onKeyPress={handleKeyPress} />
-        </div>
-    );
+  const calculateResult = () => {
+    try {
+      // eslint-disable-next-line no-eval
+      const calcResult = eval(input);
+      setResult(calcResult);
+    } catch (error) {
+      setResult('Error');
+    }
+  };
+
+  return (
+    <div>
+      <input type="text" value={input} onChange={handleInputChange} />
+      <button onClick={calculateResult}>Calculate</button>
+      <div>Result: {result}</div>
+    </div>
+  );
 };
 
 export default Calculator;
